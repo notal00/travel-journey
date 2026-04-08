@@ -74,7 +74,7 @@
     .card-body { padding: 16px 18px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
     .card-body.no-photos { grid-template-columns: 1fr; }
     .card-text { font-size: 0.9rem; line-height: 1.8; color: var(--text2); }
-    .photo-stack { position: relative; width: 110px; height: 110px; flex-shrink: 0; cursor: pointer; }
+    .photo-stack { position: relative; width: 120px; height: 180px; flex-shrink: 0; cursor: pointer; }
     .photo-stack-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 7px; border: 2px solid var(--bg); transition: opacity 0.35s ease; opacity: 0; box-shadow: var(--shadow); }
     .photo-stack-img.visible { opacity: 1; }
     .photo-stack::before, .photo-stack::after { content: ''; position: absolute; inset: 0; border-radius: 7px; border: 2px solid var(--border); pointer-events: none; }
@@ -83,7 +83,7 @@
     .photo-count { position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.45); color: #fff; font-family: 'DM Mono', monospace; font-size: 0.6rem; padding: 1px 5px; border-radius: 4px; pointer-events: none; }
     .photo-tap-hint { position: absolute; top: 5px; left: 5px; background: var(--accent-b); color: #111; font-family: 'DM Mono', monospace; font-size: 0.55rem; padding: 1px 5px; border-radius: 4px; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
     .photo-stack:hover .photo-tap-hint { opacity: 1; }
-    .photo-placeholder { width: 110px; height: 110px; border-radius: 7px; background: var(--bg3); border: 1.5px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex-shrink: 0; }
+    .photo-placeholder { width: 120px; height: 180px; border-radius: 7px; background: var(--bg3); border: 1.5px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
     .photo-placeholder svg { width: 18px; height: 18px; stroke: var(--text3); }
     .photo-placeholder span { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text3); }
     footer { padding: 48px 0 36px; text-align: center; border-top: 1px solid var(--border); margin-top: 24px; }
@@ -95,7 +95,7 @@
       .header-inner { flex-direction: column; align-items: flex-start; }
       .trip-meta { text-align: left; }
       .card-body { grid-template-columns: 1fr; }
-      .photo-stack, .photo-placeholder { width: 100%; height: 180px; }
+      .photo-stack, .photo-placeholder { width: 100%; height: auto; aspect-ratio: 2 / 3; }
     }
   </style>
 </head>
