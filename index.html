@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大理五日</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.383.0/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=DM+Mono:ital,wght@0,400;1,400&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    /* ── 主题变量 ── */
+    :root {
+      --bg: #f8f7f4;
+      --bg2: #ffffff;
+      --bg3: #f0ede8;
+      --text: #1a1a1a;
+      --text2: #555550;
+      --text3: #999990;
+      --border: #e0ddd8;
+      --accent-y: #d4f200;   /* 荧光黄 */
+      --accent-b: #00e5ff;   /* 荧光蓝 */
+      --accent-y-dim: rgba(212,242,0,0.18);
+      --accent-b-dim: rgba(0,229,255,0.13);
+      --shadow: 0 2px 12px rgba(0,0,0,0.07);
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.09);
+      --tab-active-bg: var(--text);
+      --tab-active-text: var(--bg);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111110;
+        --bg2: #1c1c1a;
+        --bg3: #242422;
+        --text: #f0ede8;
+        --text2: #aaa9a2;
+        --text3: #666660;
+        --border: #2e2e2a;
+        --accent-y: #d4f200;
+        --accent-b: #00e5ff;
+        --accent-y-dim: rgba(212,242,0,0.10);
+        --accent-b-dim: rgba(0,229,255,0.08);
+        --shadow: 0 2px 12px rgba(0,0,0,0.35);
+        --shadow-card: 0 4px 24px rgba(0,0,0,0.5);
+        --tab-active-bg: var(--text);
+        --tab-active-text: #111110;
+      }
+    }
+
+```
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ── Header ── */
+header {
+  padding: 48px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.header-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.trip-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.trip-title span {
+  display: inline-block;
+  background: var(--accent-y);
+  color: #111;
+  padding: 0 6px 2px;
+  border-radius: 2px;
+}
+.trip-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+.trip-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+
+/* ── Tab Bar ── */
+.tab-bar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 36px;
+}
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'DM Mono', monospace;
+}
+.tab-btn .tab-label {
+  font-size: 0.68rem;
+  color: var(--text3);
+  letter-spacing: 0.06em;
+  font-weight: 400;
+}
+.tab-btn .tab-day {
+  font-size: 0.82rem;
+  color: var(--text2);
+  font-weight: 400;
+}
+.tab-btn:hover {
+  border-color: var(--text3);
+  transform: translateY(-1px);
+}
+.tab-btn.active {
+  background: var(--tab-active-bg);
+  border-color: var(--tab-active-bg);
+}
+.tab-btn.active .tab-label,
+.tab-btn.active .tab-day {
+  color: var(--tab-active-text);
+}
+
+/* ── Day Panel ── */
+.day-panel { display: none; }
+.day-panel.active { display: block; }
+
+.day-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.day-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+}
+.day-title-text {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.day-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-y);
+  flex-shrink: 0;
+}
+
+/* ── Category Card ── */
+.category-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+}
+.category-card:hover { box-shadow: var(--shadow-card); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.card-icon-wrap {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon-wrap.outfit  { background: var(--accent-y-dim); }
+.card-icon-wrap.food    { background: var(--accent-b-dim); }
+.card-icon-wrap.stay    { background: var(--accent-y-dim); }
+.card-icon-wrap.transport { background: var(--accent-b-dim); }
+.card-icon-wrap svg { width: 15px; height: 15px; }
+.card-icon-wrap.outfit svg,
+.card-icon-wrap.stay svg { stroke: #7a8c00; }
+.card-icon-wrap.food svg,
+.card-icon-wrap.transport svg { stroke: #007a8c; }
+@media (prefers-color-scheme: dark) {
+  .card-icon-wrap.outfit svg,
+  .card-icon-wrap.stay svg { stroke: #b8d900; }
+  .card-icon-wrap.food svg,
+  .card-icon-wrap.transport svg { stroke: #00c8e0; }
+}
+.card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+
+/* ── Card Body: text + photos side by side ── */
+.card-body {
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+.card-body.no-photos {
+  grid-template-columns: 1fr;
+}
+.card-text {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--text2);
+}
+
+/* ── Photo Stack ── */
+.photo-stack {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.photo-stack-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 2px solid var(--bg);
+  transition: opacity 0.35s ease;
+  opacity: 0;
+  box-shadow: var(--shadow);
+}
+.photo-stack-img.visible {
+  opacity: 1;
+}
+/* 堆叠阴影装饰 */
+.photo-stack::before,
+.photo-stack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 7px;
+  border: 2px solid var(--border);
+  pointer-events: none;
+}
+.photo-stack::before {
+  transform: rotate(-3deg) translate(-2px, 2px);
+  background: var(--bg3);
+  z-index: -1;
+}
+.photo-stack::after {
+  transform: rotate(2deg) translate(2px, 2px);
+  background: var(--bg3);
+  z-index: -2;
+}
+.photo-count {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+  pointer-events: none;
+  letter-spacing: 0.05em;
+}
+.photo-tap-hint {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: var(--accent-b);
+  color: #111;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.photo-stack:hover .photo-tap-hint { opacity: 1; }
+
+/* 无照片占位 */
+.photo-placeholder {
+  width: 110px; height: 110px;
+  border-radius: 7px;
+  background: var(--bg3);
+  border: 1.5px dashed var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.photo-placeholder svg { width: 18px; height: 18px; stroke: var(--text3); }
+.photo-placeholder span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+}
+
+/* ── 底部签名 ── */
+footer {
+  padding: 48px 0 36px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+.footer-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+}
+.footer-dot {
+  width: 5px; height: 5px;
+  background: var(--accent-y);
+  border-radius: 50%;
+}
+
+/* ── 进入动画 ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.category-card {
+  animation: fadeUp 0.35s ease both;
+}
+.category-card:nth-child(1) { animation-delay: 0.04s; }
+.category-card:nth-child(2) { animation-delay: 0.10s; }
+.category-card:nth-child(3) { animation-delay: 0.16s; }
+.category-card:nth-child(4) { animation-delay: 0.22s; }
+
+/* ── 手机适配 ── */
+@media (max-width: 500px) {
+  header { padding: 32px 0 24px; }
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .trip-meta { text-align: left; }
+  .card-body { grid-template-columns: 1fr; }
+  .photo-stack, .photo-placeholder {
+    width: 100%;
+    height: 180px;
+  }
+}
+```
+
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+
+  <header>
+    <div class="header-inner">
+      <h1 class="trip-title"><span>大理</span>五日</h1>
+      <div class="trip-meta">
+        <div class="trip-subtitle" id="tripSubtitle">加载中…</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tab Bar -->
+
+  <div class="tab-bar-wrap">
+    <div class="container" style="padding:0 20px">
+      <div class="tab-bar" id="tabBar"></div>
+    </div>
+  </div>
+
+  <!-- Day Panels -->
+
+  <div id="dayPanels"></div>
+
+  <!-- Footer -->
+
+  <footer>
+    <div class="footer-mark">
+      <span class="footer-dot"></span>
+      <span id="footerText">大理 · 五日记</span>
+      <span class="footer-dot"></span>
+    </div>
+  </footer>
+
+</div>
+
+<script type="module">
+  import { tripMeta, getTripData } from './data.js';
+
+  // ── Lucide icon 映射 ──
+  const iconMap = {
+    Shirt:            lucide.Shirt,
+    UtensilsCrossed:  lucide.UtensilsCrossed,
+    BedDouble:        lucide.BedDouble,
+    MapPin:           lucide.MapPin,
+    Image:            lucide.Image,
+  };
+  function makeIcon(name, size = 15) {
+    const fn = iconMap[name];
+    if (!fn) return '';
+    const svg = lucide.createElement(fn);
+    svg.setAttribute('width', size);
+    svg.setAttribute('height', size);
+    svg.setAttribute('stroke-width', '1.8');
+    return svg.outerHTML;
+  }
+
+  // ── 渲染照片堆叠 ──
+  function renderPhotos(photos, cardEl) {
+    if (!photos || photos.length === 0) {
+      return `<div class="photo-placeholder">
+        ${makeIcon('Image', 18)}
+        <span>暂无照片</span>
+      </div>`;
+    }
+    let imgs = photos.map((src, i) =>
+      `<img class="photo-stack-img ${i === 0 ? 'visible' : ''}"
+            src="${src}" alt="旅行照片"
+            onerror="this.style.display='none'"
+            data-index="${i}" />`
+    ).join('');
+    return `<div class="photo-stack" data-photos='${JSON.stringify(photos)}' data-current="0">
+      ${imgs}
+      ${photos.length > 1 ? `
+        <span class="photo-count">1 / ${photos.length}</span>
+        <span class="photo-tap-hint">tap</span>
+      ` : ''}
+    </div>`;
+  }
+
+  // ── 点击切换照片 ──
+  function bindPhotoStacks() {
+    document.querySelectorAll('.photo-stack').forEach(stack => {
+      const photos = JSON.parse(stack.dataset.photos || '[]');
+      if (photos.length <= 1) return;
+      stack.addEventListener('click', () => {
+        const cur = parseInt(stack.dataset.current);
+        const next = (cur + 1) % photos.length;
+        const imgs = stack.querySelectorAll('.photo-stack-img');
+        imgs[cur].classList.remove('visible');
+        imgs[next].classList.add('visible');
+        stack.dataset.current = next;
+        const counter = stack.querySelector('.photo-count');
+        if (counter) counter.textContent = `${next + 1} / ${photos.length}`;
+      });
+    });
+  }
+
+  // ── 渲染主体 ──
+  async function render() {
+    // Meta
+    document.title = tripMeta.title;
+    document.getElementById('tripSubtitle').innerHTML =
+      tripMeta.subtitle.replace(' · ', '<br>') + '<br>' + tripMeta.dates;
+    document.getElementById('footerText').textContent =
+      `大理 · 五日记`;
+
+    const days = await getTripData();
+    const tabBar = document.getElementById('tabBar');
+    const panels = document.getElementById('dayPanels');
+
+    days.forEach((day, i) => {
+      // Tab button
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+      btn.dataset.day = i;
+      btn.innerHTML = `
+        <span class="tab-label">${day.date}</span>
+        <span class="tab-day">${day.label}</span>
+      `;
+      btn.addEventListener('click', () => switchDay(i));
+      tabBar.appendChild(btn);
+
+      // Panel
+      const panel = document.createElement('div');
+      panel.className = 'day-panel' + (i === 0 ? ' active' : '');
+      panel.id = `panel-${i}`;
+
+      const cards = day.categories.map(cat => {
+        const hasPhotos = cat.photos && cat.photos.length > 0;
+        return `
+          <div class="category-card">
+            <div class="card-header">
+              <div class="card-icon-wrap ${cat.type}">${makeIcon(cat.icon)}</div>
+              <span class="card-label">${cat.label}</span>
+            </div>
+            <div class="card-body${hasPhotos ? '' : ' no-photos'}">
+              <p class="card-text">${cat.text}</p>
+              ${renderPhotos(cat.photos)}
+            </div>
+          </div>`;
+      }).join('');
+
+      panel.innerHTML = `
+        <div class="day-heading">
+          <span class="day-date">${day.date}</span>
+          <span class="day-dot"></span>
+          <span class="day-title-text">${day.title}</span>
+        </div>
+        ${cards}
+      `;
+      panels.appendChild(panel);
+    });
+
+    bindPhotoStacks();
+  }
+
+  // ── 切换 Day ──
+  function switchDay(idx) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.day-panel').forEach((p, i) => {
+      p.classList.toggle('active', i === idx);
+    });
+    // 重新触发卡片动画
+    const panel = document.getElementById(`panel-${idx}`);
+    panel.querySelectorAll('.category-card').forEach((card, i) => {
+      card.style.animation = 'none';
+      card.offsetHeight; // reflow
+      card.style.animation = '';
+      card.style.animationDelay = `${0.04 + i * 0.06}s`;
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  render();
+</script>
+
+</body>
+</html>
