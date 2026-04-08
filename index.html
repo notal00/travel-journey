@@ -240,7 +240,8 @@
 
 <script>
 // ============================================================
-// 数据区 — 保持不变
+// 数据区 — 修改文字和照片路径在这里
+// 照片命名规则：./photos/day{N}_{category}_{index}.jpg
 // ============================================================
 const days = [
   {
@@ -307,15 +308,15 @@ const days = [
 ];
 
 // ============================================================
-// 逻辑处理区
+// 以下不需要改动
 // ============================================================
-
-// 1. 修正图标获取逻辑
 function makeIcon(name, size) {
   size = size || 15;
-  // 核心修正：Lucide 图标通常在 lucide.icons 目录下
-  const icons = lucide.icons || lucide; 
-  const fn = icons[name];
+  const iconMap = {
+    Shirt: lucide.Shirt, UtensilsCrossed: lucide.UtensilsCrossed,
+    BedDouble: lucide.BedDouble, MapPin: lucide.MapPin, Image: lucide.Image,
+  };
+  const fn = iconMap[name];
   if (!fn) return '';
   const svg = lucide.createElement(fn);
   svg.setAttribute('width', size);
@@ -324,7 +325,6 @@ function makeIcon(name, size) {
   return svg.outerHTML;
 }
 
-// 2. 渲染照片
 function renderPhotos(photos) {
   if (!photos || photos.length === 0) {
     return '<div class="photo-placeholder">' + makeIcon('Image', 18) + '<span>暂无照片</span></div>';
@@ -336,7 +336,6 @@ function renderPhotos(photos) {
   return '<div class="photo-stack" data-photos=\'' + JSON.stringify(photos) + '\' data-current="0">' + imgs + counter + '</div>';
 }
 
-// 3. 绑定点击切换照片事件
 function bindPhotoStacks() {
   document.querySelectorAll('.photo-stack').forEach(function(stack) {
     const photos = JSON.parse(stack.dataset.photos || '[]');
@@ -354,7 +353,6 @@ function bindPhotoStacks() {
   });
 }
 
-// 4. 切换天数面板
 function switchDay(idx) {
   document.querySelectorAll('.tab-btn').forEach(function(b, i) {
     b.classList.toggle('active', i === idx);
@@ -365,41 +363,37 @@ function switchDay(idx) {
   const panel = document.getElementById('panel-' + idx);
   panel.querySelectorAll('.category-card').forEach(function(card, i) {
     card.style.animation = 'none';
-    card.offsetHeight; // 触发重绘
+    card.offsetHeight;
     card.style.animation = '';
     card.style.animationDelay = (0.04 + i * 0.06) + 's';
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 5. 初始化页面执行逻辑 (包裹在 DOMContentLoaded 确保安全)
-document.addEventListener('DOMContentLoaded', function() {
-  const tabBar = document.getElementById('tabBar');
-  const panels = document.getElementById('dayPanels');
+const tabBar = document.getElementById('tabBar');
+const panels = document.getElementById('dayPanels');
 
-  days.forEach(function(day, i) {
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
-    btn.innerHTML = '<span class="tab-label">' + day.date + '</span><span class="tab-day">' + day.label + '</span>';
-    btn.addEventListener('click', function() { switchDay(i); });
-    tabBar.appendChild(btn);
+days.forEach(function(day, i) {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+  btn.innerHTML = '<span class="tab-label">' + day.date + '</span><span class="tab-day">' + day.label + '</span>';
+  btn.addEventListener('click', function() { switchDay(i); });
+  tabBar.appendChild(btn);
 
-    const panel = document.createElement('div');
-    panel.className = 'day-panel' + (i === 0 ? ' active' : '');
-    panel.id = 'panel-' + i;
+  const panel = document.createElement('div');
+  panel.className = 'day-panel' + (i === 0 ? ' active' : '');
+  panel.id = 'panel-' + i;
 
-    const cards = day.categories.map(function(cat) {
-      const hasPhotos = cat.photos && cat.photos.length > 0;
-      return '<div class="category-card"><div class="card-header"><div class="card-icon-wrap ' + cat.type + '">' + makeIcon(cat.icon) + '</div><span class="card-label">' + cat.label + '</span></div><div class="card-body' + (hasPhotos ? '' : ' no-photos') + '"><p class="card-text">' + cat.text + '</p>' + renderPhotos(cat.photos) + '</div></div>';
-    }).join('');
+  const cards = day.categories.map(function(cat) {
+    const hasPhotos = cat.photos && cat.photos.length > 0;
+    return '<div class="category-card"><div class="card-header"><div class="card-icon-wrap ' + cat.type + '">' + makeIcon(cat.icon) + '</div><span class="card-label">' + cat.label + '</span></div><div class="card-body' + (hasPhotos ? '' : ' no-photos') + '"><p class="card-text">' + cat.text + '</p>' + renderPhotos(cat.photos) + '</div></div>';
+  }).join('');
 
-    panel.innerHTML = '<div class="day-heading"><span class="day-date">' + day.date + '</span><span class="day-dot"></span><span class="day-title-text">' + day.title + '</span></div>' + cards;
-    panels.appendChild(panel);
-  });
-
-  bindPhotoStacks();
+  panel.innerHTML = '<div class="day-heading"><span class="day-date">' + day.date + '</span><span class="day-dot"></span><span class="day-title-text">' + day.title + '</span></div>' + cards;
+  panels.appendChild(panel);
 });
 
+bindPhotoStacks();
 </script>
 
 </body>
