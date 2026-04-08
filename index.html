@@ -310,6 +310,7 @@ const days = [
 // ============================================================
 // 以下不需要改动
 // ============================================================
+window.onload = function() {
 function makeIcon(name, size) {
   size = size || 15;
   const iconMap = {
@@ -394,6 +395,7 @@ days.forEach(function(day, i) {
 });
 
 bindPhotoStacks();
+}; // end window.onload
 </script>
 
 </body>
