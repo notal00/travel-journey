@@ -5,9 +5,9 @@
 // ============================================================
 
 export const tripMeta = {
-  title: "云南五日",
-  subtitle: "2025 · 昆明 大理 丽江",
-  dates: "2025.05.01 — 2025.05.05",
+  title: "大理五日",
+  subtitle: "2026 · 3月",
+  dates: "2026.03.09 — 2026.03.13",
 };
 
 // 照片路径规则：./photos/day{N}/{category}_{index}.jpg
@@ -19,13 +19,13 @@ export const days = [
     id: 1,
     label: "Day 1",
     date: "05.01",
-    title: "落地昆明",
+    title: "落地大理",
     categories: [
       {
         type: "outfit",       // 衣
         icon: "Shirt",
         label: "穿搭",
-        text: "高原紫外线强，备了防晒外套和墨镜。昆明气温比预期低，薄羽绒压箱底终于派上用场。",
+        text: "预报说大理气温比北京高很多，为了节省行李空间，我只带了一件外套，早上出发时北京还是很冷，穿上羽绒服内胆之后好很多。",
         photos: [
           "./photos/day1/outfit_1.jpg",
           "./photos/day1/outfit_2.jpg",
@@ -35,7 +35,7 @@ export const days = [
         type: "food",         // 食
         icon: "UtensilsCrossed",
         label: "饮食",
-        text: "第一顿就找到了正宗过桥米线。汤底鲜得出奇，配菜一盘一盘摆开来，仪式感拉满。",
+        text: "出机场先来了杯当地特色奶茶，超级好喝。怕吃吃喝喝太放纵，只吃了一顿下午的正餐，选的是当地人推荐的腊排骨，非常不错，还很便宜。",
         photos: [
           "./photos/day1/food_1.jpg",
           "./photos/day1/food_2.jpg",
@@ -46,7 +46,7 @@ export const days = [
         type: "stay",         // 住
         icon: "BedDouble",
         label: "住宿",
-        text: "住在翠湖附近的老街民宿，推窗就是石板路。房间不大但布置很用心，有一股淡淡的茉莉香。",
+        text: "住在洱海边的民宿，每天都能喝免费咖啡，还有浴缸，早饭也不错，就是位置不好找，只有自驾才方便。",
         photos: [
           "./photos/day1/stay_1.jpg",
           "./photos/day1/stay_2.jpg",
@@ -56,7 +56,7 @@ export const days = [
         type: "transport",    // 行
         icon: "MapPin",
         label: "出行",
-        text: "从机场坐地铁直达市区，很顺畅。晚上走路逛翠湖，湖边有人在放风筝，风很大但很舒服。",
+        text: "从机场取了车开始自驾，我开始很担心大理的交通，后来发现自己多虑了，比北京好多了。但中途开始下大雨，路况稍差了些，我走错了路，进了村里，太难开了，但还好最后顺利到达。",
         photos: [
           "./photos/day1/transport_1.jpg",
         ],
